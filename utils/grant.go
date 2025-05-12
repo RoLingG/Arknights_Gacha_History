@@ -25,6 +25,7 @@ type GrantResp struct {
 	Type   string `json:"type"`
 }
 
+// todo: 这里的AppCode也请自行获得，这个可以在游戏官方抽卡记录页面那里获得，按F12找一下接口里面就会有了。
 func GrantPost(token string) (grantToken string, hgId string, err error) {
 	reqType := GrantReq{
 		AppCode: "be36d44aa36bfb5b",

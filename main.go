@@ -69,34 +69,29 @@ func getGachaData() (allHistoryData []utils.CharInfo) {
 	return allHistoryData
 }
 
-// todo: 记得去token_by_phone_and_password里面改自己的手机和密码
+// todo: 记得去token_by_phone_and_password里面改自己的手机和密码，grant的AppCode也请自行在官网F12一些接口里面获得
 func main() {
-	// 获取各个池子的抽卡记录
 	allHistoryData := getGachaData()
-	// 按 PoolName 分组
+	if allHistoryData == nil {
+		log.Println("Failed to retrieve gacha data")
+		return
+	}
 	poolNameGrouped := groupByPoolName(allHistoryData)
 
-	// 数据导出成json文件
-	//filename := "gacha_history.json"
-	//err = saveAsJSON(poolNameGrouped, filename)
-	//if err != nil {
-	//	fmt.Println("Failed to save JSON file:", err)
-	//	return
-	//}
-	//fmt.Printf("Data saved to %s\n", filename)
-
-	// 启动 HTTP 服务器
 	http.HandleFunc("/gacha-history", func(w http.ResponseWriter, r *http.Request) {
-		jsonData, err := json.MarshalIndent(poolNameGrouped, "", "  ") // 比起Marshal能直接美化json输出，但前端获取都是一样的，没区别
-		//jsonData, err := json.Marshal(poolNameGrouped)
+		jsonData, err := json.MarshalIndent(poolNameGrouped, "", "  ")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Access-Control-Allow-Origin", "*") // 允许所有域访问
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Write(jsonData)
 	})
+
+	// 处理静态文件
+	fs := http.FileServer(http.Dir("./asset"))
+	http.Handle("/", fs)
 
 	log.Println("Server started on :8081")
 	log.Fatal(http.ListenAndServe(":8081", nil))
