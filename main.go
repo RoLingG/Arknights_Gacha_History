@@ -69,7 +69,7 @@ func getGachaData() (allHistoryData []utils.CharInfo) {
 	return allHistoryData
 }
 
-// todo: 记得去token_by_phone_and_password里面改自己的手机和密码，grant的AppCode也请自行在官网F12一些接口里面获得
+// todo: 记得去token_by_phone_and_password里面改自己的手机和密码
 func main() {
 	allHistoryData := getGachaData()
 	if allHistoryData == nil {

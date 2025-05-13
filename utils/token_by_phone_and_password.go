@@ -11,8 +11,8 @@ import (
 
 // TODO: 在这里把自己的手机和密码改好嗷
 var reqType = TokenByPhoneAndPasswordReq{
-	Phone:    "phone",
-	Password: "password",
+	Phone:    "18923638521",
+	Password: "rolingandyou233.",
 }
 
 type TokenByPhoneAndPasswordReq struct {

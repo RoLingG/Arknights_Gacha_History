@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let currentPage = 1;
-    let itemsPerPage = 10;
     let totalPages = 0;
     let data = null;
 
@@ -57,8 +55,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         },
                         title: {
                             display: true,
-                            text: `${poolName} Rarity Distribution`
-                        }
+                            text: `${poolName} 寻访记录`,
+                            font: {
+                                size: 20
+                            }
+                        },
                     }
                 }
             });
@@ -82,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             const rareCharsDiv = document.createElement('div');
-            rareCharsDiv.innerHTML = `<h3>Total Count: ${count}, Top 5 Rare Five Stars Characters in ${poolName}:</h3><ul>${rareFiveChars.map(name => `<li>${name}</li>`).join('')}</ul>`;
+            rareCharsDiv.innerHTML = `<span>总寻访数: ${count}，《${poolName}》寻访最近出的六星为:</span><ul>${rareFiveChars.map(name => `<li>${name}</li>`).join('')}</ul>`;
             rareCharsContainer.appendChild(rareCharsDiv);
         });
     }

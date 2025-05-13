@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacha History Chart</title>
+    <title>明日方舟寻访记录</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,7 +15,29 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start; /* 修改为flex-start以使内容上移 */
+            background: linear-gradient(45deg, #b6ecb6, #ffffff, #b6ecb6, #ffffff);
+            background-size: 400% 400%;
+            animation: gradient 12s ease infinite;
         }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 100% 50%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            75% {
+                background-position: 0% 100%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         .chart-container {
             margin-top: 10px; /* 减小上边距 */
             display: flex;
@@ -24,12 +46,14 @@
             gap: 20px;
             position: relative; /* 添加相对定位 */
         }
+
         .chart-container canvas {
-            width: 350px;
-            height: 350px;
+            width: 300px;
+            height: 300px;
             position: relative; /* 设置画布相对定位 */
             filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.2)); /* 添加毛玻璃样式的遮罩 */
         }
+
         .chart-container canvas::after {
             content: "";
             position: absolute;
@@ -41,6 +65,7 @@
             backdrop-filter: blur(5px); /* 添加模糊效果 */
             z-index: 10; /* 确保遮罩在图表之上 */
         }
+
         .rare-chars {
             margin-left: 300px;
             margin-top: 20px; /* 减小上边距 */
@@ -49,24 +74,16 @@
             justify-content: space-between;
             gap: 20px;
         }
+
         .rare-chars div {
             width: 45%;
             text-align: left;
-            background-color: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
-        }
-        .pagination {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .pagination button {
-            padding: 5px 10px;
-            margin: 5px;
         }
     </style>
 </head>
 <body>
-<h1>Gacha History Chart</h1>
+<h1>明日方舟寻访记录</h1>
 <div class="chart-container" id="chartContainer">
     <!-- Charts will be inserted here -->
 </div>
