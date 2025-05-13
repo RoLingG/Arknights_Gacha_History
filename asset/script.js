@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let totalPages = 0;
     let data = null;
 
+    // 如果是服务器部署，记得该这个接口的子域名
     fetch('http://localhost:8081/gacha-history')
         .then(response => response.json())
         .then(response => {
