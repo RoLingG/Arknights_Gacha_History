@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func groupByPoolName(data []utils.CharInfo) map[string][]utils.CharInfo {
@@ -35,10 +36,7 @@ func getGachaData() (allHistoryData []utils.CharInfo) {
 	if err != nil {
 		return
 	}
-	grantToken, _, gErr := utils.GrantPost(token)
-	if gErr != nil {
-		return
-	}
+	grantToken, _, _ := utils.GrantPost(token)
 	uid, bingingErr := utils.BindingListGet(grantToken, "arknights")
 	if bingingErr != nil {
 		return
@@ -71,14 +69,32 @@ func getGachaData() (allHistoryData []utils.CharInfo) {
 
 // todo: 记得去token_by_phone_and_password里面改自己的手机和密码
 func main() {
-	allHistoryData := getGachaData()
-	if allHistoryData == nil {
-		log.Println("Failed to retrieve gacha data")
-		return
-	}
-	poolNameGrouped := groupByPoolName(allHistoryData)
+	var dataChan = make(chan []utils.CharInfo)
+	// 设置定时任务，每5分钟更新一次数据
+	go func() {
+		for {
+			allHistoryData := getGachaData()
+			if allHistoryData == nil {
+				log.Println("Failed to retrieve gacha data")
+				return
+			} else {
+				dataChan <- allHistoryData
+				log.Println("Data refreshed")
+			}
+			time.Sleep(1 * time.Second)
+		}
+	}()
+
+	poolNameGrouped := make(map[string][]utils.CharInfo)
 
 	http.HandleFunc("/gacha-history", func(w http.ResponseWriter, r *http.Request) {
+		select {
+		case data := <-dataChan:
+			poolNameGrouped = groupByPoolName(data)
+		default:
+			log.Println("Failed to get pool name")
+			return
+		}
 		jsonData, err := json.MarshalIndent(poolNameGrouped, "", "  ")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
